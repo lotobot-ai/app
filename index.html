@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LotoBot AI | Inteligência Artificial para Loterias</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #0077ff;
+      --primary-glow: 0 0 15px #0077ff;
+      --secondary-color: #00ff9d;
+      --secondary-glow: 0 0 15px #00ff9d;
+      --dark-color: #0a0a1a;
+      --light-color: #f8f9fa;
+      --text-color: #e0e0e0;
+      --border-radius: 12px;
+      --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      --transition: all 0.3s ease;
+      --neon-blue: #0077ff;
+      --neon-green: #00ff9d;
+      --accent-color: #ff3a5e;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--dark-color);
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(0, 119, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(0, 255, 157, 0.1) 0%, transparent 50%);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    /* Header */
+    header {
+      background-color: rgba(10, 10, 26, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(0, 119, 255, 0.3);
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--light-color);
+      text-decoration: none;
+    }
+    
+    .logo h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(145deg, var(--neon-blue), var(--neon-green));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(0, 119, 255, 0.5);
+    }
+    
+    .logo-icon i {
+      color: var(--dark-color);
+      font-size: 20px;
+    }
+    
+    .cta-button {
+      background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+      color: var(--dark-color);
+      font-weight: 700;
+      padding: 12px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 0 20px rgba(0, 119, 255, 0.5);
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 30px rgba(0, 119, 255, 0.8);
+    }
+    
+    /* Hero Section */
+    .hero {
+      padding: 180px 0 100px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" stroke="%230077ff" stroke-width="0.5" fill="none" /></svg>');
+      opacity: 0.1;
+      z-index: -1;
+    }
+    
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto 40px;
+      color: var(--text-color);
+    }
+    
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 40px;
+    }
+    
+    .secondary-button {
+      background: transparent;
+      color: var(--light-color);
+      border: 2px solid var(--neon-blue);
+      padding: 12px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: var(--transition);
+      font-weight: 600;
+      box-shadow: 0 0 10px rgba(0, 119, 255, 0.3);
+    }
+    
+    .secondary-button:hover {
+      background-color: rgba(0, 119, 255, 0.1);
+      box-shadow: 0 0 20px rgba(0, 119, 255, 0.5);
+    }
+    
+    /* Features Section */
+    .features {
+      padding: 100px 0;
+      background-color: rgba(10, 10, 26, 0.5);
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .section-title h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--light-color);
+      position: relative;
+      display: inline-block;
+    }
+    
+    .section-title h2::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+      border-radius: 3px;
+    }
+    
+    .section-title p {
+      max-width: 700px;
+      margin: 0 auto;
+      color: var(--text-color);
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+      margin-top: 60px;
+    }
+    
+    .feature-card {
+      background-color: rgba(10, 10, 26, 0.8);
+      border-radius: var(--border-radius);
+      padding: 30px;
+      text-align: center;
+      transition: var(--transition);
+      border: 1px solid rgba(0, 119, 255, 0.2);
+      box-shadow: var(--box-shadow);
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--neon-blue);
+      box-shadow: 0 15px 30px rgba(0, 119, 255, 0.2);
+    }
+    
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      background: rgba(0, 119, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      transition: var(--transition);
+      border: 2px solid var(--neon-blue);
+    }
+    
+    .feature-card:hover .feature-icon {
+      background: linear-gradient(145deg, var(--neon-blue), var(--neon-green));
+      box-shadow: 0 0 20px rgba(0, 119, 255, 0.5);
+    }
+    
+    .feature-icon i {
+      font-size: 36px;
+      color: var(--neon-blue);
+      transition: var(--transition);
+    }
+    
+    .feature-card:hover .feature-icon i {
+      color: var(--dark-color);
+    }
+    
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--light-color);
+    }
+    
+    .feature-card p {
+      color: var(--text-color);
+    }
+    
+    /* How It Works Section */
+    .how-it-works {
+      padding: 100px 0;
+      position: relative;
+    }
+    
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    .steps::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 40px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--neon-blue), var(--neon-green));
+      z-index: -1;
+    }
+    
+    .step {
+      display: flex;
+      gap: 30px;
+      position: relative;
+    }
+    
+    .step-number {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(145deg, var(--dark-color), #151530);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--neon-blue);
+      border: 2px solid var(--neon-blue);
+      box-shadow: 0 0 15px rgba(0, 119, 255, 0.3);
+      flex-shrink: 0;
+    }
+    
+    .step-content {
+      background-color: rgba(10, 10, 26, 0.8);
+      border-radius: var(--border-radius);
+      padding: 30px;
+      border: 1px solid rgba(0, 119, 255, 0.2);
+      box-shadow: var(--box-shadow);
+      flex-grow: 1;
+    }
+    
+    .step-content h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--light-color);
+    }
+    
+    .step-content p {
+      color: var(--text-color);
+    }
+    
+    /* Testimonials Section */
+    .testimonials {
+      padding: 100px 0;
+      background-color: rgba(10, 10, 26, 0.5);
+    }
+    
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+      margin-top: 60px;
+    }
+    
+    .testimonial-card {
+      background-color: rgba(10, 10, 26, 0.8);
+      border-radius: var(--border-radius);
+      padding: 30px;
+      border: 1px solid rgba(0, 119, 255, 0.2);
+      box-shadow: var(--box-shadow);
+      position: relative;
+    }
+    
+    .testimonial-card::before {
+      content: """;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 5rem;
+      color: rgba(0, 119, 255, 0.1);
+      font-family: Georgia, serif;
+      line-height: 1;
+    }
+    
+    .testimonial-content {
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .author-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--neon-blue);
+      box-shadow: 0 0 10px rgba(0, 119, 255, 0.3);
+    }
+    
+    .author-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .author-info h4 {
+      font-size: 1.2rem;
+      color: var(--light-color);
+      margin-bottom: 5px;
+    }
+    
+    .author-info p {
+      color: var(--text-color);
+      font-size: 0.9rem;
+    }
+    
+    .rating {
+      color: #FFD700;
+      font-size: 1.2rem;
+      margin-top: 5px;
+    }
+    
+    /* Pricing Section */
+    .pricing {
+      padding: 100px 0;
+      position: relative;
+    }
+    
+    .pricing-options {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 60px;
+      flex-wrap: wrap;
+    }
+    
+    .pricing-card {
+        background-color: rgba(10, 10, 26, 0.8);
+        border-radius: var(--border-radius);
+        padding: 40px;
+        border: 1px solid rgba(0, 119, 255, 0.2);
+        box-shadow: var(--box-shadow);
+        width: 100%;
+        max-width: 350px;
+        text-align: center;
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .pricing-card.featured {
+        border-color: var(--neon-blue);
+        transform: scale(1.05);
+      }
+      
+      .pricing-card.featured::before {
+        content: " MUDE SUA VIDA ";
+        position: absolute;
+        top: 10px;
+        right: -10px;
+        background: var(--accent-color);
+        color: white;
+        padding: 5px 15px;
+        font-size: 12px;
+        font-weight: bold;
+        border-radius: 3px;
+        z-index: 1,
+        white-space: nowrap;
+        box-sizing: border-box;
+      }
+      
+      .pricing-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--neon-blue);
+        box-shadow: 0 15px 30px rgba(0, 119, 255, 0.3);
+      }
+      
+      .pricing-card.featured:hover {
+        transform: translateY(-10px) scale(1.05);
+      }
+      
+      .pricing-header {
+        margin-bottom: 30px;
+      }
+      
+      .pricing-header h3 {
+        font-size: 1.8rem;
+        color: var(--light-color);
+        margin-bottom: 15px;
+      }
+      
+      .pricing-price {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--light-color);
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+      }
+      
+      .pricing-price span {
+        font-size: 1.2rem;
+        font-weight: 400;
+        color: var(--text-color);
+      }
+      
+      .pricing-period {
+        color: var(--text-color);
+        font-size: 0.9rem;
+      }
+      
+      .pricing-features {
+        margin: 30px 0;
+        text-align: left;
+      }
+      
+      .pricing-feature {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+        color: var(--text-color);
+      }
+      
+      .pricing-feature i {
+        color: var(--neon-green);
+        font-size: 1.2rem;
+      }
+      
+      .pricing-cta {
+        margin-top: 30px;
+      }
+      
+      /* FAQ Section */
+      .faq {
+        padding: 100px 0;
+        background-color: rgba(10, 10, 26, 0.5);
+      }
+      
+      .faq-list {
+        max-width: 800px;
+        margin: 60px auto 0;
+      }
+      
+      .faq-item {
+        background-color: rgba(10, 10, 26, 0.8);
+        border-radius: var(--border-radius);
+        margin-bottom: 20px;
+        border: 1px solid rgba(0, 119, 255, 0.2);
+        overflow: hidden;
+      }
+      
+      .faq-question {
+        padding: 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--light-color);
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: var(--transition);
+      }
+      
+      .faq-question:hover {
+        background-color: rgba(0, 119, 255, 0.1);
+      }
+      
+      .faq-question i {
+        color: var(--neon-blue);
+        transition: var(--transition);
+      }
+      
+      .faq-answer {
+        padding: 0 20px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+        color: var(--text-color);
+      }
+      
+      .faq-item.active .faq-question {
+        background-color: rgba(0, 119, 255, 0.1);
+      }
+      
+      .faq-item.active .faq-question i {
+        transform: rotate(180deg);
+      }
+      
+      .faq-item.active .faq-answer {
+        padding: 20px;
+        max-height: 1000px;
+      }
+      
+      /* CTA Section */
+      .cta-section {
+        padding: 100px 0;
+        text-align: center;
+        background: linear-gradient(rgba(10, 10, 26, 0.9), rgba(10, 10, 26, 0.9)), url('https://images.unsplash.com/photo-1518544801976-3e159b142a05?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
+        position: relative;
+      }
+      
+      .cta-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, rgba(0, 119, 255, 0.2) 0%, transparent 70%);
+      }
+      
+      .cta-content {
+        position: relative;
+        z-index: 1;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      
+      .cta-content h2 {
+        font-size: 3rem;
+        margin-bottom: 30px;
+        color: var(--light-color);
+      }
+      
+      .cta-content p {
+        font-size: 1.2rem;
+        margin-bottom: 40px;
+        color: var(--text-color);
+      }
+      
+      .countdown {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 40px 0;
+      }
+      
+      .countdown-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: rgba(10, 10, 26, 0.8);
+        border-radius: var(--border-radius);
+        padding: 20px;
+        min-width: 100px;
+        border: 1px solid rgba(0, 119, 255, 0.3);
+        box-shadow: 0 0 15px rgba(0, 119, 255, 0.2);
+      }
+      
+      .countdown-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--neon-blue);
+        margin-bottom: 5px;
+      }
+      
+      .countdown-label {
+        font-size: 0.9rem;
+        color: var(--text-color);
+        text-transform: uppercase;
+      }
+      
+      /* Footer */
+      footer {
+        background-color: rgba(5, 5, 15, 0.9);
+        padding: 60px 0 30px;
+        border-top: 1px solid rgba(0, 119, 255, 0.3);
+      }
+      
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+      
+      .footer-column h3 {
+        color: var(--light-color);
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+        position: relative;
+        padding-bottom: 10px;
+      }
+      
+      .footer-column h3::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 2px;
+        background: var(--neon-blue);
+      }
+      
+      .footer-column ul {
+        list-style: none;
+      }
+      
+      .footer-column ul li {
+        margin-bottom: 10px;
+      }
+      
+      .footer-column ul li a {
+        color: var(--text-color);
+        text-decoration: none;
+        transition: var(--transition);
+      }
+      
+      .footer-column ul li a:hover {
+        color: var(--neon-blue);
+        padding-left: 5px;
+      }
+      
+      .footer-social {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+      }
+      
+      .social-icon {
+        width: 40px;
+        height: 40px;
+        background-color: rgba(10, 10, 26, 0.8);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-color);
+        text-decoration: none;
+        transition: var(--transition);
+        border: 1px solid rgba(0, 119, 255, 0.3);
+      }
+      
+      .social-icon:hover {
+        background-color: var(--neon-blue);
+        color: var(--dark-color);
+        transform: translateY(-3px);
+        box-shadow: 0 0 15px rgba(0, 119, 255, 0.5);
+      }
+      
+      .footer-bottom {
+        text-align: center;
+        padding-top: 30px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-color);
+        font-size: 0.9rem;
+      }
+      
+      /* Responsive */
+      @media (max-width: 992px) {
+        .hero h1 {
+          font-size: 2.8rem;
+        }
+        
+        .countdown-item {
+          min-width: 80px;
+          padding: 15px;
+        }
+        
+        .countdown-number {
+          font-size: 2rem;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .hero {
+          padding: 150px 0 80px;
+        }
+        
+        .hero h1 {
+          font-size: 2.2rem;
+        }
+        
+        .hero p {
+          font-size: 1rem;
+        }
+        
+        .section-title h2 {
+          font-size: 2rem;
+        }
+        
+        .hero-buttons {
+          flex-direction: column;
+          gap: 15px;
+        }
+        
+        .step {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+        
+        .steps::before {
+          display: none;
+        }
+        
+        .cta-content h2 {
+          font-size: 2.2rem;
+        }
+        
+        .countdown {
+          gap: 10px;
+        }
+        
+        .countdown-item {
+          min-width: 60px;
+          padding: 10px;
+        }
+        
+        .countdown-number {
+          font-size: 1.5rem;
+        }
+        
+        .countdown-label {
+          font-size: 0.7rem;
+        }
+      }
+      
+      @media (max-width: 576px) {
+        .header-content {
+          flex-direction: column;
+          gap: 20px;
+        }
+        
+        .hero h1 {
+          font-size: 1.8rem;
+        }
+        
+        .pricing-options {
+          gap: 20px;
+        }
+        
+        .pricing-card {
+          padding: 30px;
+        }
+        
+        .pricing-card.featured {
+          transform: scale(1);
+        }
+        
+        .pricing-card.featured:hover {
+          transform: translateY(-10px);
+        }
+      }
+      
+      /* Animations */
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(0, 119, 255, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 15px rgba(0, 119, 255, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(0, 119, 255, 0);
+        }
+      }
+      
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+      
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+      
+      .float {
+        animation: float 4s ease-in-out infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container header-content">
+        <a href="#" class="logo">
+          <div class="logo-icon">
+            <i class="fas fa-robot"></i>
+          </div>
+          <h1>LotoBot AI</h1>
+        </a>
+        <a href="#pricing" class="cta-button">Começar Agora</a>
+      </div>
+    </header>
+    
+    <section class="hero">
+      <div class="container">
+        <h1>Primeiro Robô do Brasil alimentado por IA para prever números da Loteria</h1>
+        <p>O Lotobot utiliza redes neurais LSTM (Long Short-Term Memory), a mesma tecnologia usada por gigantes como Google e Tesla, para analisar PADRÕES OCULTOS em milhões de dados históricos das loterias. Ele aprende, prevê e entrega combinações estratégicas para você jogar com MUITO MAIS CONFIANÇA! .</p>
+        <div class="hero-buttons">
+          <a href="#pricing" class="cta-button pulse">Quero Otimizar Minhas Apostas</a>
+          <a href="#how-it-works" class="secondary-button">Como Funciona</a>
+        </div>
+      </div>
+    </section>
+    
+    <section class="features" id="features">
+      <div class="container">
+        <div class="section-title">
+          <h2>Recursos Exclusivos</h2>
+          <p>Descubra como o LotoBot AI está revolucionando a maneira de jogar nas loterias brasileiras com tecnologia de ponta.</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3>Inteligência Artificial</h3>
+            <p>Algoritmos de aprendizado profundo analisam padrões complexos em milhares de sorteios anteriores.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3>Análise Estatística</h3>
+          <p>Combinações geradas com base em frequência histórica, tendências e correlações entre números.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-file-export"></i>
+          </div>
+          <h3>Exportação Instantânea</h3>
+          <p>Jogos gerados são exportados automaticamente para Excel, prontos para você apostar.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-sync-alt"></i>
+          </div>
+          <h3>Atualização Automática</h3>
+          <p>Base de dados sempre atualizada com os resultados mais recentes de todas as loterias.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <h3>Multiplataforma</h3>
+          <p>Acesse de qualquer dispositivo - computador, tablet ou smartphone, a qualquer momento.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Segurança Total</h3>
+          <p>Seus dados e jogos gerados são protegidos com criptografia de ponta a ponta.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <div class="section-title">
+        <h2>Como Funciona</h2>
+        <p>Gerar jogos otimizados com o LotoBot AI é simples, rápido e eficiente.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Escolha sua Loteria</h3>
+            <p>Selecione entre Mega-Sena, Lotofácil ou Lotomania de acordo com sua preferência de jogo.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Atualize a Base de Dados</h3>
+            <p>Com um clique, o sistema atualiza automaticamente todos os resultados históricos para análise precisa.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Defina a Quantidade de Jogos</h3>
+            <p>Escolha quantos jogos deseja gerar, de 1 a 100, de acordo com seu orçamento e estratégia.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Gere Jogos Otimizados</h3>
+            <p>O algoritmo de IA processa todos os dados e gera combinações estatisticamente otimizadas em segundos.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h3>Exporte e Aposte</h3>
+            <p>Seus jogos são exportados automaticamente em Excel, prontos para serem apostados em qualquer lotérica.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="testimonials" id="testimonials">
+    <div class="container">
+      <div class="section-title">
+        <h2>Depoimentos</h2>
+        <p>Veja o que nossos usuários estão dizendo sobre o LotoBot AI.</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <p>"Depois que comecei a usar o LotoBot, minhas apostas ganharam uma nova dimensão estratégica. Já acertei a quadra 3 vezes em apenas dois meses! O retorno sobre o investimento foi impressionante."</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Carlos Mendes">
+            </div>
+            <div class="author-info">
+              <h4>Carlos Mendes</h4>
+              <p>São Paulo, SP</p>
+              <div class="rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <p>"Como professora de matemática, fiquei impressionada com a sofisticação estatística por trás do LotoBot. O algoritmo realmente entende padrões complexos e gera combinações que fazem sentido matematicamente."</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+              <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Márcia Silva">
+            </div>
+            <div class="author-info">
+              <h4>Márcia Silva</h4>
+              <p>Rio de Janeiro, RJ</p>
+              <div class="rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <p>"Jogava há 15 anos sem nunca ter ganhado nada significativo. Na primeira semana usando o LotoBot, acertei 13 números na Lotofácil! A interface é super intuitiva e a exportação para Excel facilita muito na hora de fazer as apostas."</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+              <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Roberto Almeida">
+            </div>
+            <div class="author-info">
+              <h4>Roberto Almeida</h4>
+              <p>Belo Horizonte, MG</p>
+              <div class="rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="section-title">
+        <h2>Plano Exclusivo</h2>
+        <p>Acesso completo ao LotoBot AI por um valor único e especial.</p>
+      </div>
+      <div class="pricing-options">
+        <div class="pricing-card featured">
+          <div class="pricing-header">
+            <h3>Plano Completo</h3>
+            <div class="pricing-price">
+              R$197<span>,00</span>
+            </div>
+            <div class="pricing-period">Pagamento único</div>
+          </div>
+          <div class="pricing-features">
+            <div class="pricing-feature">
+              <i class="fas fa-check"></i>
+              <span>Acesso a todas as loterias</span>
+            </div>
+            <div class="pricing-feature">
+              <i class="fas fa-check"></i>
+              <span>Geração ilimitada de jogos</span>
+            </div>
+            <div class="pricing-feature">
+              <i class="fas fa-check"></i>
+              <span>Exportação para Excel</span>
+            </div>
+            <div class="pricing-feature">
+              <i class="fas fa-check"></i>
+              <span>Atualizações automáticas</span>
+            </div>
+            <div class="pricing-feature">
+              <i class="fas fa-check"></i>
+              <span>Análise avançada de padrões</span>
+            </div>
+            <div class="pricing-feature">
+              <i class="fas fa-check"></i>
+              <span>Suporte prioritário 24/7</span>
+            </div>
+            <div class="pricing-feature">
+              <i class="fas fa-check"></i>
+              <span>Guia Estratégico de Apostas</span>
+            </div>
+          </div>
+          <div class="pricing-cta">
+            <a href="#" class="cta-button">Começar Agora</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="section-title">
+        <h2>Perguntas Frequentes</h2>
+        <p>Tire suas dúvidas sobre o LotoBot AI.</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>O LotoBot garante que vou ganhar na loteria?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Não. O LotoBot utiliza análise estatística avançada para identificar padrões e tendências, mas loterias são jogos de azar e nenhuma tecnologia pode prever com certeza os resultados futuros. Nossa ferramenta aumenta suas chances ao gerar combinações estatisticamente mais relevantes, mas não pode garantir vitórias.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Preciso entender de tecnologia para usar o LotoBot?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Absolutamente não! Nossa interface foi projetada para ser intuitiva e amigável. Basta selecionar a loteria, o número de jogos desejados e clicar em "Iniciar". Todo o processo de análise complexa acontece nos bastidores, entregando a você apenas os resultados finais prontos para uso.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Como o LotoBot é diferente de geradores aleatórios comuns?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Enquanto geradores comuns criam números puramente aleatórios, o LotoBot analisa o histórico de sorteios, frequência de números, padrões temporais e correlações entre números usando inteligência artificial. Nossa tecnologia identifica padrões que seriam impossíveis de detectar manualmente, gerando combinações com maior potencial matemático.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Posso usar o LotoBot em qualquer dispositivo?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>Sim! O LotoBot funciona perfeitamente em computadores, tablets e smartphones. Nossa interface responsiva se adapta automaticamente a qualquer tamanho de tela, permitindo que você gere seus jogos otimizados de qualquer lugar, a qualquer momento.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Como faço para receber suporte se tiver dúvidas?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>Oferecemos suporte por e-mail para todos os usuários. Clientes dos planos Premium e Profissional têm acesso a suporte prioritário via chat e WhatsApp. Nossa equipe está disponível para ajudar com qualquer dúvida técnica ou estratégica sobre o uso da plataforma.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Existe alguma garantia de satisfação?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>Sim! Oferecemos garantia incondicional de satisfação por 7 dias. Se por qualquer motivo você não ficar satisfeito com o LotoBot, basta nos enviar um e-mail solicitando o reembolso e devolveremos 100% do seu investimento, sem perguntas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-content">
+      <h2>Transforme Suas Apostas Hoje Mesmo</h2>
+      <p>Junte-se aos milhares de apostadores que estão utilizando inteligência artificial para otimizar suas chances. Oferta por tempo limitado!</p>
+      
+      <!-- Substitua este bloco -->
+<div class="countdown" interval="18000">
+  <div class="countdown-item">
+    <div class="countdown-number" id="countdown-hours">5</div>
+    <div class="countdown-label">Horas</div>
+  </div>
+  <div class="countdown-item">
+    <div class="countdown-number" id="countdown-minutes">00</div>
+    <div class="countdown-label">Minutos</div>
+  </div>
+  <div class="countdown-item">
+    <div class="countdown-number" id="countdown-seconds">00</div>
+    <div class="countdown-label">Segundos</div>
+  </div>
+</div>
+
+      
+      <a href="#pricing" class="cta-button pulse">QUERO OTIMIZAR MINHAS APOSTAS AGORA</a>
+      <p style="margin-top: 20px; font-size: 0.9rem;">Acesso imediato após a confirmação do pagamento</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>LotoBot AI</h3>
+        <p>Tecnologia de ponta para otimizar suas apostas em loterias com análise preditiva de padrões e inteligência artificial.</p>
+        <div class="footer-social">
+          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h3>Links Rápidos</h3>
+        <ul>
+          <li><a href="#features">Recursos</a></li>
+          <li><a href="#how-it-works">Como Funciona</a></li>
+          <li><a href="#testimonials">Depoimentos</a></li>
+          <li><a href="#pricing">Planos e Preços</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Loterias</h3>
+        <ul>
+          <li><a href="#">Mega-Sena</a></li>
+          <li><a href="#">Lotofácil</a></li>
+          <li><a href="#">Lotomania</a></li>
+          
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Contato</h3>
+        <ul>
+          <li><a href="mailto:suporte@lotobot.ai">suporte@lotobot.ai</a></li>
+                    <li><a href="#">Central de Ajuda</a></li>
+          <li><a href="#">Política de Privacidade</a></li>
+          <li><a href="#">Termos de Uso</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 LotoBot AI. Todos os direitos reservados.</p>
+      <p style="margin-top: 10px; font-size: 0.8rem;">Aviso Legal: O LotoBot AI é uma ferramenta de Inteligência Artificial nada na loteria é 100% garantido, mas suas chances aumentam drasticamente!. Jogue com responsabilidade.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // FAQ Toggle
+  document.querySelectorAll('.faq-question').forEach(question => {
+    question.addEventListener('click', () => {
+      const item = question.parentNode;
+      item.classList.toggle('active');
+    });
+  });
+  
+  // Countdown Timer
+
+  // Substitua esta função
+
+
+  function updateCountdown() {
+    const countdownElement = document.querySelector('.countdown');
+    const hoursElement = document.getElementById('countdown-hours');
+    const minutesElement = document.getElementById('countdown-minutes');
+    const secondsElement = document.getElementById('countdown-seconds');
+    
+    // Obter o intervalo em segundos (5 horas = 18000 segundos)
+    const interval = parseInt(countdownElement.getAttribute('data-evergreen-interval') || '18000');
+    
+    // Verificar se já existe um tempo final salvo no sessionStorage
+    let secondsLeft;
+    const endTime = sessionStorage.getItem('countdownEndTime');
+    
+    if (endTime) {
+      // Calcular segundos restantes
+      secondsLeft = Math.max(0, Math.floor((parseInt(endTime) - Date.now()) / 1000));
+      
+      // Se o tempo acabou, reiniciar
+      if (secondsLeft <= 0) {
+        const newEndTime = Date.now() + (interval * 1000);
+        sessionStorage.setItem('countdownEndTime', newEndTime.toString());
+        secondsLeft = interval;
+      }
+    } else {
+      // Primeira visita - definir o tempo final
+      const endTime = Date.now() + (interval * 1000);
+      sessionStorage.setItem('countdownEndTime', endTime.toString());
+      secondsLeft = interval;
+    }
+    
+    // Calcular horas, minutos e segundos
+    const hours = Math.floor(secondsLeft / 3600);
+    const minutes = Math.floor((secondsLeft % 3600) / 60);
+    const seconds = secondsLeft % 60;
+    
+    // Atualizar o display
+    hoursElement.textContent = hours.toString().padStart(2, '0');
+    minutesElement.textContent = minutes.toString().padStart(2, '0');
+    secondsElement.textContent = seconds.toString().padStart(2, '0');
+  }
+  
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+  
+  // Smooth Scroll
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+</script>
+</body>
+</html>
