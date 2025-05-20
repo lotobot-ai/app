@@ -815,32 +815,66 @@
         }
       }
       
-      @media (max-width: 576px) {
-        .header-content {
-          flex-direction: column;
-          gap: 20px;
-        }
-        
-        .hero h1 {
-          font-size: 1.8rem;
-        }
-        
-        .pricing-options {
-          gap: 20px;
-        }
-        
-        .pricing-card {
-          padding: 30px;
-        }
-        
-        .pricing-card.featured {
-          transform: scale(1);
-        }
-        
-        .pricing-card.featured:hover {
-          transform: translateY(-10px);
-        }
-      }
+      /* Adicione este código ao final do seu arquivo CSS ou dentro da tag <style> */
+
+/* Para tablets (telas menores que 992px) */
+@media (max-width: 991px) {
+  .countdown {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .countdown-item {
+    margin: 5px 10px;
+  }
+  
+  .cta-button {
+    display: block;
+    width: 80%;
+    margin: 20px auto 0;
+    text-align: center;
+    padding: 12px 15px;
+    font-size: 16px;
+  }
+}
+
+/* Para smartphones (telas menores que 768px) */
+@media (max-width: 767px) {
+  .countdown {
+    margin-bottom: 20px;
+  }
+  
+  .cta-button {
+    width: 90%;
+    font-size: 14px;
+    white-space: normal; /* Permite que o texto quebre em várias linhas */
+    height: auto;
+    padding: 10px;
+  }
+  
+  /* Corrige o espaçamento entre o contador e o botão */
+  .countdown + .cta-button {
+    margin-top: 25px;
+  }
+}
+
+/* Para telas muito pequenas (menores que 480px) */
+@media (max-width: 479px) {
+  .countdown-item {
+    margin: 3px 5px;
+  }
+  
+  .countdown-number {
+    font-size: 24px;
+    padding: 8px;
+  }
+  
+  .countdown-label {
+    font-size: 12px;
+  }
+}
+
       
       /* Animations */
       @keyframes pulse {
@@ -1213,7 +1247,6 @@
     <div class="countdown-label">Segundos</div>
   </div>
 </div>
-
       
       <a href="#pricing" class="cta-button pulse">QUERO OTIMIZAR MINHAS APOSTAS</a>
       <p style="margin-top: 20px; font-size: 0.9rem;">Acesso imediato após a confirmação do pagamento</p>
